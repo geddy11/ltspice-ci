@@ -28,7 +28,6 @@ import matplotlib.pyplot as plt
 # import PyLTSpice.LTSpice_RawRead as RawRead
 from PyLTSpice import RawRead
 from PyLTSpice.log.ltsteps import LTSpiceLogReader
-import codecs
 
 plt.rcParams["figure.figsize"] = [12, 6]
 
@@ -85,8 +84,8 @@ def plot_bode(fname):
     plt.savefig("./" + fname.replace(".raw", ".png"), dpi=100)
 
 
-def process_simdata(pmarg):
-    """Create summary table of measurements in the simulation and bode plot"""
+def process_simdata(pmarg, pfreq):
+    """Create summary table of measurements in the simulation"""
     # create summary table
     res = ["Pass"]
     if pmarg < PM_MIN:
@@ -94,7 +93,8 @@ def process_simdata(pmarg):
     dfs = pd.DataFrame(
         {
             "Spec. (dB)": [PM_MIN],
-            "Phase margin (°)": [pmarg],
+            "Phase margin": [pmarg],
+            "Frequency (Hz)": [pfreq],
             "Result": res,
         }
     )
@@ -103,22 +103,17 @@ def process_simdata(pmarg):
         f.write("## Simulation results for opamp_open_loop\n")
         f.write(dfs.to_markdown())
         f.write("\n\n")
-    # create bode plot
-    plot_bode("opamp_open_loop.raw")
 
 
 def main():
-    # convert .log file from ANSI to UTF-8
-    with codecs.open("../ltspice/opamp_open_loop.log", "r", encoding="cp1252") as file:
-        lines = file.read()
-    with codecs.open("opamp_open_loop_utf.log", "w", encoding="utf8") as file:
-        file.write(lines)
-    # extract measurement with PyLTSpice
-    data = LTSpiceLogReader("opamp_open_loop_utf.log")
+    # extract measurements from log file
+    data = LTSpiceLogReader("../ltspice/opamp_open_loop.log")
     meas_names = data.get_measure_names()
     mlist = [f"{data[name][0]}" for name in meas_names]
     pm = tuple(mlist[0].replace("(", "").replace(")", "").split(","))
-    process_simdata(float(pm[1].strip("°")))
+    process_simdata(float(pm[1].strip("°")), float(mlist[1]))
+    # create bode plot from raw file
+    plot_bode("opamp_open_loop.raw")
     exit(0)
 
 
