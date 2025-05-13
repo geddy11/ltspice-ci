@@ -21,6 +21,14 @@ jobs:
         run: |
           sudo xvfb-run -a wine64 "/root/.wine/drive_c/Program Files/ADI/LTspice/Ltspice.exe" -b -Run ./ltspice/opamp_open_loop.asc
           ls -al ./ltspice
+      - name: Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: sim results
+          path: |
+            ./ltspice/opamp_open_loop.log
+            ./ltspice/opamp_open_loop.raw
+          retention-days: 5
 
   report:
     needs: ltspice
