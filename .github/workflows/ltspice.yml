@@ -1,0 +1,28 @@
+name: ltspice-ci
+
+on: [push, pull_request]
+
+jobs:
+  ltspice:
+    runs-on: ubuntu-latest
+    container: aanas0sayed/docker-ltspice
+    steps:
+      - name: Check-out repository
+        uses: actions/checkout@v3
+      - name: Environment variables
+        run: |
+          export DISPLAY=:0.0
+          export WINEDEBUG=fixme-all,err-all,warn-all
+      - name: LTspice
+        run: xvfb-run -a wine64 "/root/.wine/drive_c/Program Files/ADI/LTspice/Ltspice.exe" -b -Run ./ltspice/opamp_open_loop.asc
+
+  report:
+    needs: ltspice
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: PyLTSpice
+        run: pip install PyLTSpice
