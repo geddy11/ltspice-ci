@@ -19,9 +19,8 @@ jobs:
           sudo mkdir -p ~/docker-data/wine
       - name: Run LTspice
         run: |
-          whoami
           sudo xvfb-run -a wine64 "/root/.wine/drive_c/Program Files/ADI/LTspice/Ltspice.exe" -b -Run ./ltspice/opamp_open_loop.asc
-          sudo ls -al ./ltspice
+          ls -al ./ltspice
 
   report:
     needs: ltspice
