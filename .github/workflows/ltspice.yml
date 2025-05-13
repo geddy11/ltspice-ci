@@ -18,7 +18,7 @@ jobs:
           pwd
           ls -al
           sudo rm -rf ~/docker-data/wine
-          sudo mkdir -P ~/docker-data/wine
+          sudo mkdir -p ~/docker-data/wine
       - name: LTspice
         run: sudo xvfb-run -a wine64 "/root/.wine/drive_c/Program Files/ADI/LTspice/Ltspice.exe" -b -Run ./ltspice/opamp_open_loop.asc
 
