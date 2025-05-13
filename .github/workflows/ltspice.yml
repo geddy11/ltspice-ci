@@ -13,6 +13,10 @@ jobs:
         run: |
           export DISPLAY=:0.0
           export WINEDEBUG=fixme-all,err-all,warn-all
+      - name: Preparations
+        run: |
+          sudo rm -rf ~/docker-data/wine
+          mkdir ~/docker-data/wine
       - name: LTspice
         run: xvfb-run -a wine64 "/root/.wine/drive_c/Program Files/ADI/LTspice/Ltspice.exe" -b -Run ./ltspice/opamp_open_loop.asc
 
