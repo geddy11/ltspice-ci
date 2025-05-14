@@ -30,7 +30,7 @@ jobs:
             ./ltspice/freq_resp.raw
           retention-days: 5
 
-  report:
+  .report:
     needs: ltspice
     runs-on: ubuntu-latest
     steps:
@@ -52,6 +52,24 @@ jobs:
           ls -al ./ltspice
           cd script
           python3 freq_resp.py
+          # Create CML report
+          echo '![](./freq_resp.png "Frequency response plot")' >> freq_resp.md
+          cml comment create freq_resp.md
+        env:
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    
+  report:
+    needs: ltspice
+    runs-on: ubuntu-latest
+    container: docker://ghcr.io/iterative/cml:0-dvc2-base1
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/download-artifact@v4
+      - run: |
+          pip install PyLTSpice numpy pandas tabulate
+          cd script
+          python3 freq_resp.py
+ 
           # Create CML report
           echo '![](./freq_resp.png "Frequency response plot")' >> freq_resp.md
           cml comment create freq_resp.md
