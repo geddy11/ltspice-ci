@@ -30,7 +30,8 @@ jobs:
             ./ltspice/freq_resp.raw
           retention-days: 5
 
-  .report:
+  report2:
+    if: false
     needs: ltspice
     runs-on: ubuntu-latest
     steps:
