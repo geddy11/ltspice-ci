@@ -40,12 +40,18 @@ jobs:
           python-version: "3.11"
       - name: Check-out repository
         uses: actions/checkout@v3
+      - name: Setup CML
+        uses: iterative/setup-cml@v2
+      - env:
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: PyLTSpice
-        run: pip install PyLTSpice
+        run: pip install PyLTSpice numpy pandas
       - name: Get artifacts
         uses: actions/download-artifact@v4
       - name: test
         run: |
           pwd
           ls -al ./ltspice
+          cd script
+          python3 freq_resp.py
 

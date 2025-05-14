@@ -77,9 +77,9 @@ def plot_bode(fname):
             )
         else:
             ax2.plot(np.abs(f.get_wave(0)), ph, linestyle="--", color="tab:orange")
-    ax2.set_ylabel("Phase (degrees)")
+    ax2.set_ylabel("Phase (°)")
     fig.legend(loc="upper right", bbox_to_anchor=(1, 1), bbox_transform=ax.transAxes)
-    fig.suptitle("Open loop response")
+    fig.suptitle("Frequency response")
     plt.tight_layout()
     plt.savefig("./" + fname.replace(".raw", ".png"), dpi=100)
 
@@ -93,27 +93,27 @@ def process_simdata(pmarg, pfreq):
     dfs = pd.DataFrame(
         {
             "Spec. (dB)": [PM_MIN],
-            "Phase margin": [pmarg],
+            "Phase margin (°)": [pmarg],
             "Frequency (Hz)": [pfreq],
             "Result": res,
         }
     )
     dfs = dfs.rename(index={0: "Min."})
-    with open("./opamp_open_loop.md", "w") as f:
-        f.write("## Simulation results for opamp_open_loop\n")
+    with open("./freq_resp.md", "w") as f:
+        f.write("## Simulation results for freq_resp.asc\n")
         f.write(dfs.to_markdown())
         f.write("\n\n")
 
 
 def main():
     # extract measurements from log file
-    data = LTSpiceLogReader("../ltspice/opamp_open_loop.log")
+    data = LTSpiceLogReader("../ltspice/freq_resp.log")
     meas_names = data.get_measure_names()
     mlist = [f"{data[name][0]}" for name in meas_names]
     pm = tuple(mlist[0].replace("(", "").replace(")", "").split(","))
     process_simdata(float(pm[1].strip("°")), float(mlist[1]))
     # create bode plot from raw file
-    plot_bode("opamp_open_loop.raw")
+    plot_bode("freq_resp.raw")
     exit(0)
 
 
