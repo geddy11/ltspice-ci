@@ -43,7 +43,7 @@ jobs:
       - name: Setup CML
         uses: iterative/setup-cml@v2
       - name: PyLTSpice
-        run: pip install PyLTSpice numpy pandas
+        run: pip install PyLTSpice numpy pandas tabulate
       - name: Get artifacts
         uses: actions/download-artifact@v4
       - name: test
