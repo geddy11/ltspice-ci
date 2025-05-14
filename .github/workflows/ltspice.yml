@@ -47,5 +47,5 @@ jobs:
       - name: test
         run: |
           pwd
-          ls -al
+          ls -al ./ltspice
 
