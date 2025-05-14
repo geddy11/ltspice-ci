@@ -24,8 +24,7 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-
-# import PyLTSpice.LTSpice_RawRead as RawRead
+from matplotlib.ticker import FormatStrFormatter
 from PyLTSpice import RawRead
 from PyLTSpice.log.ltsteps import LTSpiceLogReader
 
@@ -58,7 +57,8 @@ def plot_bode(fname):
                 color="tab:blue",
             )
     ax.set_xlabel("Frequency (Hz)")
-    ax.set_ylabel("Amplitude (dB)")
+    ax.set_ylabel("Amplitude")
+    plt.gca().yaxis.set_major_formatter(FormatStrFormatter("%ddB"))
     ax.set_xscale("log")
     ax.grid(True, which="both", axis="both")
     # phase
@@ -77,7 +77,8 @@ def plot_bode(fname):
             )
         else:
             ax2.plot(np.abs(f.get_wave(0)), ph, linestyle="--", color="tab:orange")
-    ax2.set_ylabel("Phase (°)")
+    ax2.set_ylabel("Phase")
+    plt.gca().yaxis.set_major_formatter(FormatStrFormatter("%d°"))
     fig.legend(loc="upper right", bbox_to_anchor=(1, 1), bbox_transform=ax.transAxes)
     fig.suptitle("Frequency response")
     plt.tight_layout()
@@ -85,7 +86,7 @@ def plot_bode(fname):
 
 
 def process_simdata(pmarg, pfreq):
-    """Create summary table of measurements in the simulation"""
+    """Create summary table of measurements in the simulation."""
     # create summary table
     res = ["Pass"]
     if pmarg < PM_MIN:

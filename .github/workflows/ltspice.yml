@@ -7,8 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     container: aanas0sayed/docker-ltspice
     steps:
-      - name: Check-out repository
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
       - name: Environment variables
         run: |
           export DISPLAY=:0.0
@@ -30,7 +29,7 @@ jobs:
             ./ltspice/freq_resp.raw
           retention-days: 7
     
-  report:
+  post-process:
     needs: ltspice
     runs-on: ubuntu-latest
     permissions:
@@ -51,7 +50,6 @@ jobs:
       - name : CML
         run: |
           cd script
-          pwd
           # Create CML report
           echo '![](./freq_resp.png "Frequency response plot")' >> freq_resp.md
           cml comment create freq_resp.md
