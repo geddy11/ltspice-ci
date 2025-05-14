@@ -40,14 +40,17 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: actions/download-artifact@v4
-      - name: Python
+      - name: Python packages
         run: |
           pip install PyLTSpice numpy pandas tabulate Pygments
+      - name: Extract data
+        run: |
           cd script
           python3 freq_resp.py
           pygmentize -g freq_resp.md
       - name : CML
         run: |
+          cd script
           pwd
           # Create CML report
           echo '![](./freq_resp.png "Frequency response plot")' >> freq_resp.md
