@@ -28,49 +28,27 @@ jobs:
           path: |
             ./ltspice/freq_resp.log
             ./ltspice/freq_resp.raw
-          retention-days: 5
-
-  report2:
-    if: false
-    needs: ltspice
-    runs-on: ubuntu-latest
-    steps:
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-      - name: Check-out repository
-        uses: actions/checkout@v3
-      - name: Setup CML
-        uses: iterative/setup-cml@v2
-      - name: PyLTSpice
-        run: pip install PyLTSpice numpy pandas tabulate
-      - name: Get artifacts
-        uses: actions/download-artifact@v4
-      - name: test
-        run: |
-          pwd
-          ls -al ./ltspice
-          cd script
-          python3 freq_resp.py
-          # Create CML report
-          echo '![](./freq_resp.png "Frequency response plot")' >> freq_resp.md
-          cml comment create freq_resp.md
-        env:
-          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          retention-days: 7
     
   report:
     needs: ltspice
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
     container: docker://ghcr.io/iterative/cml:0-dvc2-base1
     steps:
       - uses: actions/checkout@v3
       - uses: actions/download-artifact@v4
-      - run: |
-          pip install PyLTSpice numpy pandas tabulate
+      - name: Python
+        run: |
+          pip install PyLTSpice numpy pandas tabulate Pygments
           cd script
           python3 freq_resp.py
- 
+          pygmentize -g freq_resp.md
+      - name : CML
+        run: |
+          pwd
           # Create CML report
           echo '![](./freq_resp.png "Frequency response plot")' >> freq_resp.md
           cml comment create freq_resp.md
