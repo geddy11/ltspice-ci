@@ -6,7 +6,7 @@ Why do we want to run LTspice simulations in a CI pipeline?
   * Automatically generate documentation from simulation results
   * Run multiple simulations in parallel
 
-Any probably many other good reasons too!
+And probably many other good reasons too!
 
 ## Test circuit
 The circuit to be analyzed in this repo is a simple amplifier with a capacitive load. The purpose of this simulation is to determine the phase margin of the amplifier. The phase margin can be analyzed by inserting a small signal generator between the amplifier input and output (feedback):
