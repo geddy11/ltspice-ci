@@ -35,6 +35,6 @@ The pipeline consists of two jobs:
     * The two output files (`.log` and `.raw`) are made available as artifacts to the next job.
   * Post processing.
     * A Python script utilizing `PyLTSpice` extracts the phase margin and bode plot data and outputs a markdown report.
-    * The tool CML (Continuous Machine Learning) is used to publish the report as a comment to the commit on GitHub. This means you get an email with the report (including plot) too.
+    * The tool CML (Continuous Machine Learning) is used to publish the report as a comment to the commit on GitHub. This means you get an email with the report (including plot) too. Take a look at the CML report in one of the [latest commits](https://github.com/geddy11/ltspice-ci/commit/48e5e4f6a4a5a4d7ca8a8d24e2917bfe8e4a980e#commitcomment-157057425).
 
 That's it, enjoy automation of LTspice simulations!
